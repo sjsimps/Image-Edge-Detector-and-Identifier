@@ -4,14 +4,29 @@
 
 int main(int argc, char* argv[])
 {
+	std::cout<< "Edge detection started.\n";
+
 	Image* my_png = new Image();
-	my_png->Decode_From_Disk("test.png");
 
-	my_png->Apply_Gauss_Filter3();
+	bool decoded = my_png->Decode_From_Disk("test.png");
 
-	my_png->Encode_From_Disk("testxG3.png");
+	if (decoded)
+	{
+		my_png->Apply_Gauss_Filter5();
 
-	std::cout<< "Completed.";
+		my_png->Encode_From_Disk("testxGauss5.png");
 
+		std::cout<< "Gauss Filter Applied.\n";
+
+		my_png->Calculate_Intensity(true,true,true);
+
+		my_png->Encode_From_Disk("testxRGB5.png");
+
+		std::cout<< "RGB edge detection completed.\n";
+	}
+	else
+	{
+		std::cout<< "PNG decode failed. Check to make sure the file you wish to decode exists.";
+	}
 	return 0;
 }

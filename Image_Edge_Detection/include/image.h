@@ -18,8 +18,11 @@ typedef struct Pixel
 
 typedef struct Intensity_Gradient
 {
-	float intensity;
-	float angle;
+	//0 : r
+	//1 : g
+	//2 : b
+	float intensity[3];
+	float angle[3];
 } Intensity_Gradient;
 
 class Image
@@ -29,8 +32,8 @@ public:
 	Image();
 	~Image();
 
-	void Decode_From_Disk(const char* filename);
-	void Encode_From_Disk(const char* filename);
+	bool Decode_From_Disk(const char* filename);
+	bool Encode_From_Disk(const char* filename);
 
 	void Get_Pixel(int x, int y, Pixel* pix);
 	void Set_Pixel(int x, int y, Pixel* pix);
@@ -38,6 +41,7 @@ public:
 	void Apply_Gauss_Filter3();
 	void Apply_Gauss_Filter5();
 	void Convolve(int kernel_size, float **kernel);
+	void Calculate_Intensity(bool red, bool green, bool blue);
 
 	std::vector<unsigned char> m_image;
 	Intensity_Gradient **m_gradient;
