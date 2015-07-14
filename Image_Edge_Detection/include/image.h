@@ -18,12 +18,16 @@ typedef struct Pixel
 
 typedef struct Intensity_Gradient
 {
-	//0 : r
-	//1 : g
-	//2 : b
-	float intensity[3];
-	float angle[3];
+	float intensity;
+	float angle;
 } Intensity_Gradient;
+
+enum Color {
+	red,
+	green,
+	blue,
+	monochrome
+};
 
 class Image
 {
@@ -40,14 +44,112 @@ public:
 
 	void Apply_Gauss_Filter3();
 	void Apply_Gauss_Filter5();
-	void Convolve(int kernel_size, float **kernel);
-	void Calculate_Intensity(bool red, bool green, bool blue);
+
+	void Map_Intensity_To_Pixels(Color channel);
+	void Calculate_Differential_Intensity(Color channel);
+	void Calculate_Angular_Intensity(Color channel);
 
 	std::vector<unsigned char> m_image;
 	Intensity_Gradient **m_gradient;
 	unsigned m_width;
 	unsigned m_height;
 
+private:
+	void Apply_Gauss_Blur(const int kernel_size);
+
 };
+
+
+//////////////////////////// IMAGE KERNELS //////////////
+
+////////////// GAUSS BLUR KERNELS
+
+const float gauss_3_kernel[3][3] =
+{
+	{0.0625,	0.125,	0.0625},
+	{0.125,		0.25,	0.125},
+	{0.0625,	0.125,	0.0625}
+};
+
+const float gauss_5_kernel[5][5] =
+{
+	{2,	4,	5,	4,	2},
+	{4,	9,	12,	9,	4},
+	{5,	12,	15,	12,	5},
+	{4,	9,	12,	9,	4},
+	{2,	4,	5,	4,	2}
+};
+
+
+////////////// DIFFERENTIAL KERNELS
+
+const float vert_kernel[3][3] =
+{
+	{-1,-2,-1},
+	{0,0,0},
+	{1,2,1}
+};
+
+const float horz_kernel[3][3] =
+{
+	{-1,0,1},
+	{-2,0,2},
+	{-1,0,1}
+};
+
+////////////// ANGULAR KERNELS
+
+//The kernel postfixes indicate the angular center corresponding to each
+//kernel. When used for angular comparison, the kernel used will be picked
+// based on the angle.
+const float kernel_0d8pi[3][3] =
+{
+	{1,0,1},
+	{2,0,2},
+	{1,0,1}
+};
+const float kernel_1d8pi[3][3] =
+{
+	{0,0,2},
+	{2,0,2},
+	{2,0,0}
+};
+const float kernel_2d8pi[3][3] =
+{
+	{0,1,2},
+	{1,0,1},
+	{2,1,0}
+};
+const float kernel_3d8pi[3][3] =
+{
+	{0,2,2},
+	{0,0,0},
+	{2,2,0}
+};
+const float kernel_4d8pi[3][3] =
+{
+	{1,2,1},
+	{0,0,0},
+	{1,2,1}
+};
+const float kernel_5d8pi[3][3] =
+{
+	{2,2,0},
+	{0,0,0},
+	{0,2,2}
+};
+const float kernel_6d8pi[3][3] =
+{
+	{2,1,0},
+	{1,0,1},
+	{0,1,2}
+};
+const float kernel_7d8pi[3][3] =
+{
+	{2,0,0},
+	{2,0,2},
+	{0,0,2}
+};
+
 
 #endif /* INCLUDE_IMAGE_H_ */

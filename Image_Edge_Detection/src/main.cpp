@@ -18,9 +18,9 @@ int main(int argc, char* argv[])
 
 		std::cout<< "Gauss Filter Applied.\n";
 
-		my_png->Calculate_Intensity(true,true,true);
+		my_png->Calculate_Differential_Intensity(monochrome);
 
-		my_png->Encode_From_Disk("testxRGB5.png");
+		my_png->Encode_From_Disk("testxM5.png");
 
 		std::cout<< "RGB edge detection completed.\n";
 	}
