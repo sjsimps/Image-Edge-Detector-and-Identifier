@@ -21,19 +21,7 @@ bool Image::Encode_From_Disk(const char* filename)
 	unsigned error = lodepng::encode(png, m_image, m_width, m_height);
 	if(!error) lodepng::save_file(png, filename);
 
-	if(error)
-	{
-		std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
-	}
-	else
-	{
-		//instantiate intensity gradient:
-		m_gradient = new Intensity_Gradient*[m_width];
-		for(int i = 0; i<m_width; i++)
-		{
-			m_gradient[i] = new Intensity_Gradient[m_height];
-		}
-	}
+	if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
 	return (!error);
 }
 
@@ -46,7 +34,19 @@ bool Image::Decode_From_Disk(const char* filename)
 	unsigned error = lodepng::decode(m_image, m_width, m_height, png);
 	//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA...
 
-	if(error) std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+	if(error)
+	{
+		std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+	}
+	else
+	{
+		//instantiate intensity gradient:
+		m_gradient = new Intensity_Gradient*[m_width];
+		for(int i = 0; i<m_width; i++)
+		{
+			m_gradient[i] = new Intensity_Gradient[m_height];
+		}
+	}
 
 	return (!error);
 }
@@ -235,11 +235,13 @@ void Image::Calculate_Differential_Intensity(Color channel)
 					}
 				}
 			}
-			for(int n = 0; n<3; n++)
-			{
-				m_gradient[x][y].intensity = sqrt( pow(horz_magnitude,2) + pow(vert_magnitude,2) );
-				m_gradient[x][y].angle = atan2(vert_magnitude,horz_magnitude);
-			}
+
+			m_gradient[x][y].intensity = sqrt( pow(horz_magnitude,2) + pow(vert_magnitude,2) );
+
+			//vertical magnitude must be negative and the horizontal and vertical
+			//must be switched in order to compute the normal to the differential angle
+			//m_gradient[x][y].angle = (float)atan2(vert_magnitude, horz_magnitude );
+			m_gradient[x][y].angle = (float)atan2(horz_magnitude, (-vert_magnitude) );
 		}
 	}
 
@@ -248,9 +250,93 @@ void Image::Calculate_Differential_Intensity(Color channel)
 	delete index_pix;
 }
 
+float Image::Get_Angular_Kernel_Val(int x, int y, float angle)
+{
+	double pi = 3.14159265;
+	double new_angle = (angle < 0) ? ((angle + pi) * 180 / pi) : (angle * 180 / pi);
+	float retval = 0;
+
+	if (new_angle <= 11.25 || new_angle > 168.75 )
+	{
+		retval = kernel_0d8pi[x][y];
+	}
+	else if (new_angle <= 33.75 )
+	{
+		retval = kernel_1d8pi[x][y];
+	}
+	else if (new_angle <= 56.25 )
+	{
+		retval = kernel_2d8pi[x][y];
+	}
+	else if (new_angle <= 78.75 )
+	{
+		retval = kernel_3d8pi[x][y];
+	}
+	else if (new_angle <= 101.25 )
+	{
+		retval = kernel_4d8pi[x][y];
+	}
+	else if (new_angle <= 123.75 )
+	{
+		retval = kernel_5d8pi[x][y];
+	}
+	else if (new_angle <= 146.25 )
+	{
+		retval = kernel_6d8pi[x][y];
+	}
+	else if (new_angle <= 168.75 )
+	{
+		retval = kernel_7d8pi[x][y];
+	}
+
+	return retval;
+}
+
 void Image::Calculate_Angular_Intensity(Color channel)
 {
+	const int kernel_width = 1;
+	const int kernel_size = 3;
 
+	float magnitude;
+	int kernel_val;
+	Pixel* index_pix = new Pixel;
+	float new_intensity[m_width][m_height];
+
+	for (int x = 0; x < m_width; x++)
+	{
+		for (int y = 0; y < m_height; y++)
+		{
+
+			magnitude = 0;
+
+			for (int i = -kernel_width; i <= kernel_width; i++)
+			{
+				for (int j = -kernel_width; j <= kernel_width; j++)
+				{
+					if (x+i >= 0 && y+i >= 0 && x+i < m_width && y+j < m_height)
+					{
+						kernel_val = Get_Angular_Kernel_Val(i+kernel_width, j+kernel_width, m_gradient[x][y].angle );
+
+						magnitude += (m_gradient[x+i][y+j].intensity * kernel_val);
+
+					}
+				}
+			}
+			new_intensity[x][y] = (magnitude > 0) ? magnitude : 0;
+		}
+	}
+
+	for (int x = 0; x < m_width; x++)
+	{
+		for (int y = 0; y < m_height; y++)
+		{
+			m_gradient[x][y].intensity = new_intensity[x][y];
+		}
+	}
+
+	Map_Intensity_To_Pixels(channel);
+
+	delete index_pix;
 }
 
 
