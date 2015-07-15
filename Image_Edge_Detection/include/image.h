@@ -57,6 +57,7 @@ private:
 	void Apply_Gauss_Blur(const int kernel_size);
 	float Get_Angular_Kernel_Val(int x, int y, float angle);
 	void Map_Intensity_To_Pixels(Color channel);
+	float Get_Angular_Similarity(float angle1, float angle2);
 
 };
 
@@ -105,51 +106,51 @@ const float horz_kernel[3][3] =
 // based on the angle.
 const float kernel_0d8pi[3][3] =
 {
-		{0,-2,0},
+		{0,0,0},
 		{2,0,2},
-		{0,-2,0}
+		{0,0,0}
 };
 const float kernel_1d8pi[3][3] =
 {
-		{-1,-1,1},
+		{0,0,1},
 		{1,0,1},
-		{1,-1,-1}
+		{1,0,0}
 };
 const float kernel_2d8pi[3][3] =
 {
-		{-2,0,2},
+		{0,0,2},
 		{0,0,0},
-		{2,0,-2}
+		{2,0,0}
 };
 const float kernel_3d8pi[3][3] =
 {
-		{-1,1,1},
-		{-1,0,-1},
-		{1,1,-1}
+		{0,1,1},
+		{0,0,0},
+		{1,1,0}
 };
 const float kernel_4d8pi[3][3] =
 {
 		{0,2,0},
-		{-2,0,-2},
+		{0,0,0},
 		{0,2,0}
 };
 const float kernel_5d8pi[3][3] =
 {
-		{1,1,-1},
-		{-1,0,-1},
-		{-1,1,1}
+		{1,1,0},
+		{0,0,0},
+		{0,1,1}
 };
 const float kernel_6d8pi[3][3] =
 {
-		{2,0,-2},
+		{2,0,0},
 		{0,0,0},
-		{-2,0,2}
+		{0,0,2}
 };
 const float kernel_7d8pi[3][3] =
 {
-		{1,-1,-1},
+		{1,0,0},
 		{1,0,1},
-		{-1,-1,1}
+		{0,0,1}
 };
 
 

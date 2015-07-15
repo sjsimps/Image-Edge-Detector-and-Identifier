@@ -4,19 +4,20 @@
 
 int main(int argc, char* argv[])
 {
+	Color channel = blue;
+	char* file = "test.png";
+
 	std::cout<< "Edge detection started.\n";
 
 	Image* my_png = new Image();
 
-	bool decoded = my_png->Decode_From_Disk("test.png");
-
-	Color channel = green;
+	bool decoded = my_png->Decode_From_Disk(file);
 
 	if (decoded)
 	{
 		my_png->Apply_Gauss_Filter5();
 
-		my_png->Encode_From_Disk("testxGauss3.png");
+		my_png->Encode_From_Disk("testxGauss5.png");
 
 		std::cout<< "Gauss Filter Applied.\n";
 

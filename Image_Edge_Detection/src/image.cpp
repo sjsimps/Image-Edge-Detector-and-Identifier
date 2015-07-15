@@ -289,7 +289,16 @@ float Image::Get_Angular_Kernel_Val(int x, int y, float angle)
 		retval = kernel_7d8pi[x][y];
 	}
 
-	return retval;
+	return retval/4;
+}
+
+float Image::Get_Angular_Similarity(float angle1, float angle2)
+{
+	float pi = 3.14159265;
+	float difference = angle1 - angle2;
+	difference += (difference > pi) ? -(2*pi) : (difference < -pi) ? (2*pi) : 0 ;
+
+	return cos(difference);
 }
 
 void Image::Calculate_Angular_Intensity(Color channel)
@@ -298,7 +307,9 @@ void Image::Calculate_Angular_Intensity(Color channel)
 	const int kernel_size = 3;
 
 	float magnitude;
-	int kernel_val;
+	float kernel_val;
+	float angle_similarity;
+
 	Pixel* index_pix = new Pixel;
 	float new_intensity[m_width][m_height];
 
@@ -317,7 +328,9 @@ void Image::Calculate_Angular_Intensity(Color channel)
 					{
 						kernel_val = Get_Angular_Kernel_Val(i+kernel_width, j+kernel_width, m_gradient[x][y].angle );
 
-						magnitude += (m_gradient[x+i][y+j].intensity * kernel_val);
+						angle_similarity = Get_Angular_Similarity(m_gradient[x+i][y+j].angle, m_gradient[x][y].angle);
+
+						magnitude += (m_gradient[x+i][y+j].intensity * angle_similarity * kernel_val);
 
 					}
 				}
