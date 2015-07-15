@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[])
 {
-	Color channel = blue;
+	Color channel = green;
 	char* file = "test.png";
 
 	std::cout<< "Edge detection started.\n";
@@ -23,11 +23,11 @@ int main(int argc, char* argv[])
 
 		my_png->Calculate_Differential_Intensity(channel);
 
-		my_png->Encode_From_Disk("testxG5.png");
+		my_png->Encode_From_Disk("testxB5.png");
 
 		my_png->Calculate_Angular_Intensity(channel);
 
-		my_png->Encode_From_Disk("testxAG5.png");
+		my_png->Encode_From_Disk("testxAB5.png");
 
 
 		std::cout<< "RGB edge detection completed.\n";
