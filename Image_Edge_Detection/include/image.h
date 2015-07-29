@@ -48,6 +48,8 @@ public:
 	void Calculate_Differential_Intensity(Color channel);
 	void Calculate_Angular_Intensity(Color channel);
 
+	void Apply_Threshold(float threshold);
+
 	std::vector<unsigned char> m_image;
 	Intensity_Gradient **m_gradient;
 	unsigned m_width;

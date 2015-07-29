@@ -352,5 +352,29 @@ void Image::Calculate_Angular_Intensity(Color channel)
 	delete index_pix;
 }
 
+void Image::Apply_Threshold(float threshold)
+{
+	Pixel white_pix;
+	Pixel black_pix;
+
+	white_pix = {.r = 0xFF,	.g = 0xFF,	.b = 0xFF,	.a = 0xFF};
+	black_pix = {.r = 0x00,	.g = 0x00,	.b = 0x00,	.a = 0xFF};
+
+	for (int x = 0; x < m_width; x++)
+	{
+		for (int y = 0; y < m_height; y++)
+		{
+			if (m_gradient[x][y].intensity > threshold)
+			{
+				Set_Pixel(x,y,&white_pix);
+			}
+			else
+			{
+				Set_Pixel(x,y, &black_pix);
+			}
+		}
+	}
+
+}
 
 

@@ -29,6 +29,10 @@ int main(int argc, char* argv[])
 
 		my_png->Encode_From_Disk("testxAB5.png");
 
+		my_png->Apply_Threshold(50);
+
+		my_png->Encode_From_Disk("threshold.png");
+
 
 		std::cout<< "RGB edge detection completed.\n";
 	}
