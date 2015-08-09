@@ -8,47 +8,77 @@ Image::Image()
 {
 	m_width = 0;
 	m_height = 0;
+	m_decoded = false;
 }
 
-Image::~Image(){}
+Image::~Image()
+{
+	Discard_Image();
+}
 
-bool Image::Encode_From_Disk(const char* filename)
+bool Image::Encode_To_Disk(const char* filename)
 {
 	//Encode and save image to disk
+	unsigned error = true;
+	if (m_decoded)
+	{
+		std::vector<unsigned char> png;
 
-	std::vector<unsigned char> png;
+		error = lodepng::encode(png, m_image, m_width, m_height);
+		if(!error) lodepng::save_file(png, filename);
 
-	unsigned error = lodepng::encode(png, m_image, m_width, m_height);
-	if(!error) lodepng::save_file(png, filename);
-
-	if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+		if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+	}
 	return (!error);
 }
 
 bool Image::Decode_From_Disk(const char* filename)
 {
-	//Load image from disk and decode
-	std::vector<unsigned char> png;
+	unsigned error = false;
 
-	lodepng::load_file(png, filename);
-	unsigned error = lodepng::decode(m_image, m_width, m_height, png);
-	//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA...
+	if (!m_decoded)
+	{
+		//Load image from disk and decode
+		std::vector<unsigned char> png;
 
-	if(error)
-	{
-		std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
-	}
-	else
-	{
-		//instantiate intensity gradient:
-		m_gradient = new Intensity_Gradient*[m_width];
-		for(int i = 0; i<m_width; i++)
+		lodepng::load_file(png, filename);
+		error = lodepng::decode(m_image, m_width, m_height, png);
+		//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA...
+
+		if(error)
 		{
-			m_gradient[i] = new Intensity_Gradient[m_height];
+			std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+		}
+		else
+		{
+			//instantiate intensity gradient:
+			m_gradient = new Intensity_Gradient*[m_width];
+			for(int i = 0; i<m_width; i++)
+			{
+				m_gradient[i] = new Intensity_Gradient[m_height];
+			}
+			m_decoded = true;
 		}
 	}
-
 	return (!error);
+}
+
+void Image::Discard_Image()
+{
+	if (m_decoded)
+	{
+		for(int x = 0; x<m_width; x++)
+		{
+			delete[] m_gradient[x];
+		}
+		delete[] m_gradient;
+
+		m_image.clear();
+		m_width = 0;
+		m_height = 0;
+		m_decoded = false;
+	}
+
 }
 
 void Image::Get_Pixel(int x, int y, Pixel* pix)
@@ -406,7 +436,6 @@ void Image::Merge_Sort(float arr[], int left_i, int right_i)
 	int merge_i1, merge_i2;
 	float temp[right_i - left_i + 1];
 
-
 	if (left_i < right_i)
 	{
 		Merge_Sort(arr, left_i, split_index);
@@ -434,8 +463,6 @@ void Image::Merge_Sort(float arr[], int left_i, int right_i)
 			arr[left_i + i] = temp[i];
 		}
 	}
-
-
 }
 
 

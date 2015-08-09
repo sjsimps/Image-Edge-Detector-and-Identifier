@@ -17,24 +17,25 @@ int main(int argc, char* argv[])
 	{
 		my_png->Apply_Gauss_Filter5();
 
-		my_png->Encode_From_Disk("testxGauss5.png");
+		my_png->Encode_To_Disk("testxGauss5.png");
 
 		std::cout<< "Gauss Filter Applied.\n";
 
 		my_png->Calculate_Differential_Intensity(channel);
 
-		my_png->Encode_From_Disk("testxB5.png");
+		my_png->Encode_To_Disk("testxB5.png");
 
 		my_png->Calculate_Angular_Intensity(channel);
 
-		my_png->Encode_From_Disk("testxAB5.png");
+		my_png->Encode_To_Disk("testxAB5.png");
 
-		my_png->Apply_Threshold(80);
+		my_png->Apply_Threshold(87);
 
-		my_png->Encode_From_Disk("threshold.png");
-
+		my_png->Encode_To_Disk("threshold.png");
 
 		std::cout<< "RGB edge detection completed.\n";
+
+		my_png->Discard_Image();
 	}
 	else
 	{

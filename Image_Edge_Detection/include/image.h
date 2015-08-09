@@ -37,7 +37,7 @@ public:
 	~Image();
 
 	bool Decode_From_Disk(const char* filename);
-	bool Encode_From_Disk(const char* filename);
+	bool Encode_To_Disk(const char* filename);
 
 	void Get_Pixel(int x, int y, Pixel* pix);
 	void Set_Pixel(int x, int y, Pixel* pix);
@@ -50,10 +50,13 @@ public:
 
 	void Apply_Threshold(unsigned int percent);
 
+	void Discard_Image();
+
 	std::vector<unsigned char> m_image;
 	Intensity_Gradient **m_gradient;
 	unsigned m_width;
 	unsigned m_height;
+	bool m_decoded;
 
 private:
 	void Apply_Gauss_Blur(const int kernel_size);
