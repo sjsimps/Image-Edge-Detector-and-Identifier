@@ -14,7 +14,9 @@ After green channel edge detection:
 
 After green channel edge angle comparison:
 ![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/Image_Edge_Detection/testxAB5.png)
-Angle comparison appears to assist primarily with reducing edges caused by noise in the image. 
+
+After 90% thresholding:
+![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/Image_Edge_Detection/threshold.png)
 
 
 Uses LodePNG [lodepng.cpp, lodepng.h] by Lode Vandevenne to complete the PNG image conversion.
