@@ -48,7 +48,7 @@ public:
 	void Calculate_Differential_Intensity(Color channel);
 	void Calculate_Angular_Intensity(Color channel);
 
-	void Apply_Threshold(float threshold);
+	void Apply_Threshold(unsigned int percent);
 
 	std::vector<unsigned char> m_image;
 	Intensity_Gradient **m_gradient;
@@ -60,7 +60,8 @@ private:
 	float Get_Angular_Kernel_Val(int x, int y, float angle);
 	void Map_Intensity_To_Pixels(Color channel);
 	float Get_Angular_Similarity(float angle1, float angle2);
-
+	float Intensity_At_Percentile(unsigned int percentile);
+	void Merge_Sort(float *arr, int index1, int index2);
 };
 
 

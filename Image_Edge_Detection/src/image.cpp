@@ -352,13 +352,13 @@ void Image::Calculate_Angular_Intensity(Color channel)
 	delete index_pix;
 }
 
-void Image::Apply_Threshold(float threshold)
+void Image::Apply_Threshold(unsigned int percent)
 {
 	Pixel white_pix;
 	Pixel black_pix;
-
 	white_pix = {.r = 0xFF,	.g = 0xFF,	.b = 0xFF,	.a = 0xFF};
 	black_pix = {.r = 0x00,	.g = 0x00,	.b = 0x00,	.a = 0xFF};
+	float threshold = Intensity_At_Percentile(percent);
 
 	for (int x = 0; x < m_width; x++)
 	{
@@ -376,5 +376,72 @@ void Image::Apply_Threshold(float threshold)
 	}
 
 }
+
+float Image::Intensity_At_Percentile(unsigned int percentile)
+{
+
+	int num_entries = m_width*m_height;
+	float *intensities = new float[num_entries];
+	int index = (percentile < 99) ? ((num_entries-1) / 100) * percentile : (num_entries-1);
+
+	int i = 0;
+	for (int x = 0; x < m_width; x++)
+	{
+		for (int y = 0; y < m_height; y++)
+		{
+			intensities[i] = m_gradient[x][y].intensity;
+			i++;
+		}
+	}
+
+	Merge_Sort(intensities, 0, num_entries-1);
+
+	return intensities[index];
+}
+
+void Image::Merge_Sort(float arr[], int left_i, int right_i)
+{
+	int split_index = (right_i + left_i)/2;
+	int num_entries = (right_i - left_i + 1);
+	int merge_i1, merge_i2;
+	float temp[right_i - left_i + 1];
+
+
+	if (left_i < right_i)
+	{
+		Merge_Sort(arr, left_i, split_index);
+		Merge_Sort(arr, split_index+1, right_i);
+
+		merge_i1 = left_i;
+		merge_i2 = split_index + 1;
+
+		for (int i = 0; i<num_entries; i++)
+		{
+			if ( (merge_i1 <= split_index) && (arr[merge_i1] < arr[merge_i2]) || (merge_i2 > right_i))
+			{
+				temp[i] = arr[merge_i1];
+				merge_i1++;
+			}
+			else
+			{
+				temp[i] = arr[merge_i2];
+				merge_i2++;
+			}
+		}
+
+		for (int i = 0; i < num_entries; i++)
+		{
+			arr[left_i + i] = temp[i];
+		}
+	}
+
+
+}
+
+
+
+
+
+
 
 

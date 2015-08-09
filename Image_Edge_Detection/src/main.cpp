@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 
 		my_png->Encode_From_Disk("testxAB5.png");
 
-		my_png->Apply_Threshold(50);
+		my_png->Apply_Threshold(87);
 
 		my_png->Encode_From_Disk("threshold.png");
 
@@ -40,5 +40,6 @@ int main(int argc, char* argv[])
 	{
 		std::cout<< "PNG decode failed. Check to make sure the file you wish to decode exists.";
 	}
+
 	return 0;
 }
