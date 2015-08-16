@@ -4,16 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/cycle_detector.cpp \
 ../src/image.cpp \
 ../src/lodepng.cpp \
 ../src/main.cpp 
 
 OBJS += \
+./src/cycle_detector.o \
 ./src/image.o \
 ./src/lodepng.o \
 ./src/main.o 
 
 CPP_DEPS += \
+./src/cycle_detector.d \
 ./src/image.d \
 ./src/lodepng.d \
 ./src/main.d 
