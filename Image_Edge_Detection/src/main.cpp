@@ -27,15 +27,13 @@ int main(int argc, char* argv[])
 
 		my_png->Calculate_Angular_Intensity(channel);
 
-		my_png->Encode_To_Disk("testxAB5.png");
-
-		my_png->Apply_Threshold(87);
+		my_png->Apply_Threshold(89);
 
 		my_png->Encode_To_Disk("threshold.png");
 
-		std::cout<< "RGB edge detection completed.\n";
-
 		my_png->Discard_Image();
+
+		std::cout<< "RGB edge detection completed.\n";
 	}
 	else
 	{

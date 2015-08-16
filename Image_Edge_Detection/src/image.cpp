@@ -9,6 +9,7 @@ Image::Image()
 	m_width = 0;
 	m_height = 0;
 	m_decoded = false;
+	m_intensity_calculated = false;
 }
 
 Image::~Image()
@@ -77,6 +78,7 @@ void Image::Discard_Image()
 		m_width = 0;
 		m_height = 0;
 		m_decoded = false;
+		m_intensity_calculated = false;
 	}
 
 }
@@ -126,6 +128,12 @@ void Image::Apply_Gauss_Blur(const int kernel_size)
 	Pixel* index_pix = new Pixel;
 	Pixel* new_img[m_width][m_height];
 
+	if (!m_decoded)
+	{
+		std::cout<<"Must decode image before applying gauss blur!\n";
+		throw;
+	}
+
 	for (int x = 0; x < m_width; x++)
 	{
 		for (int y = 0; y < m_height; y++)
@@ -138,7 +146,7 @@ void Image::Apply_Gauss_Blur(const int kernel_size)
 			{
 				for (int j = -kernel_width; j <= kernel_width; j++)
 				{
-					if (x+i > 0 && y+i > 0 && x+i < m_width && y+j < m_height)
+					if ( (x+i >= 0) && (y+j >= 0) && (x+i < m_width) && (y+j < m_height) )
 					{
 						Get_Pixel(x+i, y+j, index_pix);
 
@@ -175,6 +183,7 @@ void Image::Apply_Gauss_Blur(const int kernel_size)
 			delete new_img[x][y];
 		}
 	}
+	delete index_pix;
 }
 
 void Image::Map_Intensity_To_Pixels(Color channel)
@@ -220,6 +229,12 @@ void Image::Calculate_Differential_Intensity(Color channel)
 	int pixel_val;
 	Pixel* index_pix = new Pixel;
 
+	if (!m_decoded)
+	{
+		std::cout<<"Must decode image before calculating the differential intensity!\n";
+		throw;
+	}
+
 	for (int x = 0; x < m_width; x++)
 	{
 		for (int y = 0; y < m_height; y++)
@@ -232,7 +247,7 @@ void Image::Calculate_Differential_Intensity(Color channel)
 			{
 				for (int j = -kernel_width; j <= kernel_width; j++)
 				{
-					if (x+i >= 0 && y+i >= 0 && x+i < m_width && y+j < m_height)
+					if ( (x+i >= 0) && (y+j >= 0) && (x+i < m_width) && (y+j < m_height) )
 					{
 						Get_Pixel(x+i, y+j, index_pix);
 
@@ -274,7 +289,7 @@ void Image::Calculate_Differential_Intensity(Color channel)
 			m_gradient[x][y].angle = (float)atan2(horz_magnitude, (-vert_magnitude) );
 		}
 	}
-
+	m_intensity_calculated = true;
 	Map_Intensity_To_Pixels(channel);
 
 	delete index_pix;
@@ -343,6 +358,12 @@ void Image::Calculate_Angular_Intensity(Color channel)
 	Pixel* index_pix = new Pixel;
 	float new_intensity[m_width][m_height];
 
+	if (!m_intensity_calculated)
+	{
+		std::cout<<"Must calculate differential intensity before angular intensity!\n";
+		throw;
+	}
+
 	for (int x = 0; x < m_width; x++)
 	{
 		for (int y = 0; y < m_height; y++)
@@ -389,6 +410,12 @@ void Image::Apply_Threshold(unsigned int percent)
 	white_pix = {.r = 0xFF,	.g = 0xFF,	.b = 0xFF,	.a = 0xFF};
 	black_pix = {.r = 0x00,	.g = 0x00,	.b = 0x00,	.a = 0xFF};
 	float threshold = Intensity_At_Percentile(percent);
+
+	if (!m_intensity_calculated)
+	{
+		std::cout<<"Must calculate differential intensity before applying an image threshold!\n";
+		throw;
+	}
 
 	for (int x = 0; x < m_width; x++)
 	{
@@ -446,7 +473,7 @@ void Image::Merge_Sort(float arr[], int left_i, int right_i)
 
 		for (int i = 0; i<num_entries; i++)
 		{
-			if ( (merge_i1 <= split_index) && (arr[merge_i1] < arr[merge_i2]) || (merge_i2 > right_i))
+			if ( ( (merge_i1 <= split_index) && (arr[merge_i1] < arr[merge_i2]) ) || (merge_i2 > right_i))
 			{
 				temp[i] = arr[merge_i1];
 				merge_i1++;

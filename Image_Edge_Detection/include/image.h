@@ -57,12 +57,13 @@ public:
 	unsigned m_width;
 	unsigned m_height;
 	bool m_decoded;
+	bool m_intensity_calculated;
 
 private:
 	void Apply_Gauss_Blur(const int kernel_size);
 	float Get_Angular_Kernel_Val(int x, int y, float angle);
-	void Map_Intensity_To_Pixels(Color channel);
 	float Get_Angular_Similarity(float angle1, float angle2);
+	void Map_Intensity_To_Pixels(Color channel);
 	float Intensity_At_Percentile(unsigned int percentile);
 	void Merge_Sort(float *arr, int index1, int index2);
 };
