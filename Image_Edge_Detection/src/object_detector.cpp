@@ -1,20 +1,20 @@
 /*
- * cycle_detector.h
+ * object_detector.cpp
  *
  *  Created on: Aug 16th, 2015
  *      Author: Samuel Simpson
  */
 
+#include <object_detector.h>
 #include "image.h"
-#include "cycle_detector.h"
 #include <iostream>
 
-Cycle_Detector::Cycle_Detector(Image* thresholded_image)
+Object_Detector::Object_Detector(Image* thresholded_image)
 {
 	m_image = thresholded_image;
 }
 
-Cycle_Detector::~Cycle_Detector()
+Object_Detector::~Object_Detector()
 {
 	for(int x = 0; x < (m_image->m_width); x++)
 	{
@@ -23,7 +23,7 @@ Cycle_Detector::~Cycle_Detector()
 	delete[] m_edges;
 }
 
-void Cycle_Detector::Initialize()
+void Object_Detector::Initialize()
 {
 	m_edges = new bool*[m_image->m_width];
 	for(int x = 0; x < (m_image->m_width); x++)
@@ -32,7 +32,7 @@ void Cycle_Detector::Initialize()
 	}
 }
 
-void Cycle_Detector::Determine_Edges()
+void Object_Detector::Determine_Edges()
 {
 	Pixel red_pix;
 	red_pix = {.r = 0xFF,	.g = 0x00,	.b = 0x00,	.a = 0xFF};
@@ -53,7 +53,7 @@ void Cycle_Detector::Determine_Edges()
 	}
 }
 
-bool Cycle_Detector::Is_Edge(int x, int y, Pixel* index_pix)
+bool Object_Detector::Is_Edge(int x, int y, Pixel* index_pix)
 {
 	bool retval = false;
 	int start_x, start_y, end_x, end_y, index_x, index_y;

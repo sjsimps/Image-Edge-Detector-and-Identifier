@@ -1,7 +1,7 @@
 #include "image.h"
-#include "cycle_detector.h"
 #include <iostream>
 #include <math.h>
+#include <object_detector.h>
 
 int main(int argc, char* argv[])
 {
