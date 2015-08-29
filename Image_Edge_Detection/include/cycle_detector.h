@@ -23,15 +23,12 @@ typedef struct Cycle
 class Cycle_Detector
 {
 public:
-	Cycle_Detector();
+	Cycle_Detector(Image* thresholded_image);
 	~Cycle_Detector();
-
-	void Extract_Image_Data(Image* thresholded_image);
 
 	std::vector<Cycle> m_cycles;
 	bool **m_edges;
-	unsigned m_width;
-	unsigned m_height;
+	Image *m_image;
 };
 
 #endif /* INCLUDE_CYCLE_DETECTOR_H_ */
