@@ -25,6 +25,7 @@ class Cycle_Detector
 public:
 	Cycle_Detector(Image* thresholded_image);
 	~Cycle_Detector();
+	void Initialize();
 
 	void Determine_Edges();
 
