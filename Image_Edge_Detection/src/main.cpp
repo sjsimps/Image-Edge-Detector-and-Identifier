@@ -1,4 +1,5 @@
 #include "image.h"
+#include "cycle_detector.h"
 #include <iostream>
 #include <math.h>
 
@@ -30,6 +31,11 @@ int main(int argc, char* argv[])
 		my_png->Apply_Threshold(89);
 
 		my_png->Encode_To_Disk("threshold.png");
+
+		Cycle_Detector* my_cycle_detector = new Cycle_Detector(my_png);
+		my_cycle_detector->Determine_Edges();
+
+		my_png->Encode_To_Disk("edges.png");
 
 		my_png->Discard_Image();
 

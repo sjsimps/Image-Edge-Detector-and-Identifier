@@ -26,9 +26,14 @@ public:
 	Cycle_Detector(Image* thresholded_image);
 	~Cycle_Detector();
 
+	void Determine_Edges();
+
 	std::vector<Cycle> m_cycles;
 	bool **m_edges;
 	Image *m_image;
+
+private:
+	bool Is_Edge(int x, int y, Pixel* index_pix);
 };
 
 #endif /* INCLUDE_CYCLE_DETECTOR_H_ */

@@ -54,8 +54,8 @@ public:
 
 	std::vector<unsigned char> m_image;
 	Intensity_Gradient **m_gradient;
-	unsigned m_width;
-	unsigned m_height;
+	int m_width;
+	int m_height;
 	bool m_decoded;
 	bool m_intensity_calculated;
 

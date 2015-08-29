@@ -36,6 +36,7 @@ bool Image::Encode_To_Disk(const char* filename)
 bool Image::Decode_From_Disk(const char* filename)
 {
 	unsigned error = false;
+	unsigned width, height;
 
 	if (!m_decoded)
 	{
@@ -43,7 +44,7 @@ bool Image::Decode_From_Disk(const char* filename)
 		std::vector<unsigned char> png;
 
 		lodepng::load_file(png, filename);
-		error = lodepng::decode(m_image, m_width, m_height, png);
+		error = lodepng::decode(m_image, width, height, png);
 		//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA...
 
 		if(error)
@@ -52,6 +53,9 @@ bool Image::Decode_From_Disk(const char* filename)
 		}
 		else
 		{
+			m_width = width;
+			m_height = height;
+
 			//instantiate intensity gradient:
 			m_gradient = new Intensity_Gradient*[m_width];
 			for(int i = 0; i<m_width; i++)
@@ -223,7 +227,6 @@ void Image::Calculate_Differential_Intensity(Color channel)
 {
 	//Kernel size must be an odd number
 	const int kernel_width = 1;
-	const int kernel_size = 3;
 
 	float horz_magnitude, vert_magnitude;
 	int pixel_val;
