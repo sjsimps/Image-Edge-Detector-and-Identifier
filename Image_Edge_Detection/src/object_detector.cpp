@@ -88,3 +88,31 @@ bool Object_Detector::Is_Edge(int x, int y, Pixel* index_pix)
 
 	return retval;
 }
+
+void Object_Detector::Determine_All_Disconected_Graphs()
+{
+	/* TODO :
+	 * 	- Find each disc. graph using BFS
+	 * 	- Add each graph to m_graphs
+	 * 	- store all applicable graph points & graph size values within graph structure
+	 */
+}
+
+void Object_Detector::Highlight_Largest_Graphs(int num_graphs)
+{
+	/* TODO :
+	 * 	- Sort graphs by size and highlight the num_graphs # of largest graphs
+	 * 	- Each disconnected graph should be of different colour (ideally)
+	 * 	- The rest of the image will be black
+	 */
+}
+
+void Object_Detector::Highlight_Largest_Graphs_By_Threshold(int threshold)
+{
+	/* TODO :
+	 * 	- Sort graphs by size and highlight the largest upper threshold % of graphs
+	 * 	- Each disconnected graph should be of different colour (ideally)
+	 * 	- The rest of the image will be black
+	 */
+}
+

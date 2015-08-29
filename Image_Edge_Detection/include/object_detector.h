@@ -8,17 +8,17 @@
 #ifndef INCLUDE_OBJECT_DETECTOR_H_
 #define INCLUDE_OBJECT_DETECTOR_H_
 
-typedef struct Walk_Point
+typedef struct Graph_Point
 {
 	int x,y;
-	Walk_Point* next;
-} Walk_Point;
+	Graph_Point* next;
+} Graph_Point;
 
-typedef struct Walk
+typedef struct Graph
 {
-	Walk_Point* start;
+	Graph_Point* start;
 	unsigned int length;
-} Walk;
+} Graph;
 
 class Object_Detector
 {
@@ -29,7 +29,12 @@ public:
 
 	void Determine_Edges();
 
-	std::vector<Walk> m_walks;
+	void Determine_All_Disconected_Graphs();
+
+	void Object_Detector::Highlight_Largest_Graphs(int num_graphs);
+	void Object_Detector::Highlight_Largest_Graphs_By_Threshold(int threshold);
+
+	std::vector<Graph> m_graphs;
 	bool **m_edges;
 	Image *m_image;
 

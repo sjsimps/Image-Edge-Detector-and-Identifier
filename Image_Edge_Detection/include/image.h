@@ -42,6 +42,8 @@ public:
 	void Get_Pixel(int x, int y, Pixel* pix);
 	void Set_Pixel(int x, int y, Pixel* pix);
 
+	//TODO : Separate edge detection code from the image code!
+
 	void Apply_Gauss_Filter3();
 	void Apply_Gauss_Filter5();
 
