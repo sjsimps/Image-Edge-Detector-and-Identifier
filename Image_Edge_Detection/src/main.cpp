@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	Color channel = green;
 	char* file = "test.png";
 	Image* my_png = new Image();
-	Cycle_Detector* my_cycle_detector = new Cycle_Detector(my_png);
+	Object_Detector* my_object_detector = new Object_Detector(my_png);
 
 	std::cout<< "Edge detection started.\n";
 
@@ -32,8 +32,9 @@ int main(int argc, char* argv[])
 
 		my_png->Encode_To_Disk("threshold.png");
 
-		my_cycle_detector->Initialize();
-		my_cycle_detector->Determine_Edges();
+		my_object_detector->Initialize();
+		my_object_detector->Determine_Edges();
+		my_object_detector->Determine_All_Disconected_Graphs();
 
 		my_png->Encode_To_Disk("edges.png");
 

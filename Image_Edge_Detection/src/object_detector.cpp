@@ -6,8 +6,8 @@
  */
 
 #include <object_detector.h>
-#include "image.h"
 #include <iostream>
+
 
 Object_Detector::Object_Detector(Image* thresholded_image)
 {
@@ -51,6 +51,8 @@ void Object_Detector::Determine_Edges()
 			}
 		}
 	}
+
+	delete index_pix;
 }
 
 bool Object_Detector::Is_Edge(int x, int y, Pixel* index_pix)
@@ -89,6 +91,52 @@ bool Object_Detector::Is_Edge(int x, int y, Pixel* index_pix)
 	return retval;
 }
 
+void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in)
+{
+	std::queue<Graph_Point,std::list<Graph_Point> > bfs_queue;
+	Graph_Point new_point, current_point;
+	Graph new_graph;
+	int index_x, index_y;
+	Pixel blue_pix;
+
+	blue_pix = {.r = 0x00,	.g = 0x00,	.b = 0xFF,	.a = 0xFF};
+	new_graph.size = 0;
+	new_point = {.x = x_in, .y = y_in};
+	bfs_queue.push(new_point);
+
+	while ( ! bfs_queue.empty() )
+	{
+		current_point = bfs_queue.front();
+		bfs_queue.pop();
+
+		m_image->Set_Pixel(current_point.x, current_point.y, &blue_pix);
+
+		new_graph.points.push_back(current_point);
+		new_graph.size++;
+
+		m_edges[current_point.x][current_point.y] = false;
+
+		for (int i = -1; i <= 1; i++)
+		{
+			for (int j = -1; j <= 1; j++)
+			{
+				index_x = current_point.x + i;
+				index_y = current_point.y + j;
+				if ( (index_x >= 0) && (index_x < m_image->m_width) && (index_y >= 0) && (index_y < m_image->m_height))
+				{
+					if (m_edges[x_in][y_in])
+					{
+						new_point = {.x = index_x, .y = index_y};
+						bfs_queue.push(new_point);
+					}
+				}
+			}
+		}
+	}
+
+	m_graphs.push_back(new_graph);
+}
+
 void Object_Detector::Determine_All_Disconected_Graphs()
 {
 	/* TODO :
@@ -96,6 +144,18 @@ void Object_Detector::Determine_All_Disconected_Graphs()
 	 * 	- Add each graph to m_graphs
 	 * 	- store all applicable graph points & graph size values within graph structure
 	 */
+
+	for (int x = 0; x < (m_image->m_width); x++)
+	{
+		for (int y = 0; y < (m_image->m_height); y++)
+		{
+			if (m_edges[x][y])
+			{
+				Determine_Disconected_Graph(x,y);
+			}
+		}
+	}
+
 }
 
 void Object_Detector::Highlight_Largest_Graphs(int num_graphs)

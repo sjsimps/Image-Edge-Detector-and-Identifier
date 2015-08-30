@@ -4,22 +4,22 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/cycle_detector.cpp \
 ../src/image.cpp \
 ../src/lodepng.cpp \
-../src/main.cpp 
+../src/main.cpp \
+../src/object_detector.cpp 
 
 OBJS += \
-./src/cycle_detector.o \
 ./src/image.o \
 ./src/lodepng.o \
-./src/main.o 
+./src/main.o \
+./src/object_detector.o 
 
 CPP_DEPS += \
-./src/cycle_detector.d \
 ./src/image.d \
 ./src/lodepng.d \
-./src/main.d 
+./src/main.d \
+./src/object_detector.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

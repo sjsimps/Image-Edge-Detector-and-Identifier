@@ -5,19 +5,21 @@
  *      Author: Samuel Simpson
  */
 #include <vector>
+#include <list>
+#include <queue>
+#include "image.h"
 #ifndef INCLUDE_OBJECT_DETECTOR_H_
 #define INCLUDE_OBJECT_DETECTOR_H_
 
 typedef struct Graph_Point
 {
 	int x,y;
-	Graph_Point* next;
 } Graph_Point;
 
 typedef struct Graph
 {
-	Graph_Point* start;
-	unsigned int length;
+	std::list<Graph_Point> points;
+	int size;
 } Graph;
 
 class Object_Detector
@@ -29,12 +31,13 @@ public:
 
 	void Determine_Edges();
 
+	void Determine_Disconected_Graph(int x_in, int y_in);
 	void Determine_All_Disconected_Graphs();
 
-	void Object_Detector::Highlight_Largest_Graphs(int num_graphs);
-	void Object_Detector::Highlight_Largest_Graphs_By_Threshold(int threshold);
+	void Highlight_Largest_Graphs(int num_graphs);
+	void Highlight_Largest_Graphs_By_Threshold(int threshold);
 
-	std::vector<Graph> m_graphs;
+	std::list<Graph> m_graphs;
 	bool **m_edges;
 	Image *m_image;
 
