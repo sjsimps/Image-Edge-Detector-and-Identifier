@@ -7,6 +7,7 @@
 
 #include <object_detector.h>
 #include <iostream>
+#include <stdlib.h>
 
 
 Object_Detector::Object_Detector(Image* thresholded_image)
@@ -91,30 +92,29 @@ bool Object_Detector::Is_Edge(int x, int y, Pixel* index_pix)
 	return retval;
 }
 
-void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in)
+void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in, int blu, int gre)
 {
 	std::queue<Graph_Point,std::list<Graph_Point> > bfs_queue;
 	Graph_Point new_point, current_point;
 	Graph new_graph;
 	int index_x, index_y;
-	Pixel blue_pix;
+	Pixel *blue_pix = new Pixel;
 
-	blue_pix = {.r = 0x00,	.g = 0x00,	.b = 0xFF,	.a = 0xFF};
+	*blue_pix = {.r = 0x00,	.g = gre,	.b = blu,	.a = 0xFF};
 	new_graph.size = 0;
 	new_point = {.x = x_in, .y = y_in};
 	bfs_queue.push(new_point);
+	m_edges[x_in][y_in] = false;
 
 	while ( ! bfs_queue.empty() )
 	{
 		current_point = bfs_queue.front();
 		bfs_queue.pop();
 
-		m_image->Set_Pixel(current_point.x, current_point.y, &blue_pix);
+		m_image->Set_Pixel(current_point.x, current_point.y, blue_pix);
 
 		new_graph.points.push_back(current_point);
 		new_graph.size++;
-
-		m_edges[current_point.x][current_point.y] = false;
 
 		for (int i = -1; i <= 1; i++)
 		{
@@ -124,15 +124,19 @@ void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in)
 				index_y = current_point.y + j;
 				if ( (index_x >= 0) && (index_x < m_image->m_width) && (index_y >= 0) && (index_y < m_image->m_height))
 				{
-					if (m_edges[x_in][y_in])
+					if (m_edges[index_x][index_y])
 					{
-						new_point = {.x = index_x, .y = index_y};
+						new_point.x = index_x;
+						new_point.y = index_y;
 						bfs_queue.push(new_point);
+						m_edges[index_x][index_y] = false;
 					}
 				}
 			}
 		}
 	}
+
+	delete blue_pix;
 
 	m_graphs.push_back(new_graph);
 }
@@ -145,13 +149,17 @@ void Object_Detector::Determine_All_Disconected_Graphs()
 	 * 	- store all applicable graph points & graph size values within graph structure
 	 */
 
+	int blu = 0x255, gre = 0;
+
 	for (int x = 0; x < (m_image->m_width); x++)
 	{
 		for (int y = 0; y < (m_image->m_height); y++)
 		{
 			if (m_edges[x][y])
 			{
-				Determine_Disconected_Graph(x,y);
+				blu = (blu - 0xF) % 0xFF;
+				gre = (gre + 0xF) % 0xFF;
+				Determine_Disconected_Graph(x,y,blu,gre);
 			}
 		}
 	}

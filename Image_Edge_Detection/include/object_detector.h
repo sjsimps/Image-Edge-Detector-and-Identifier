@@ -31,7 +31,7 @@ public:
 
 	void Determine_Edges();
 
-	void Determine_Disconected_Graph(int x_in, int y_in);
+	void Determine_Disconected_Graph(int x_in, int y_in, int b, int g);
 	void Determine_All_Disconected_Graphs();
 
 	void Highlight_Largest_Graphs(int num_graphs);
