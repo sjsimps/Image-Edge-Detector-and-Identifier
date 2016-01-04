@@ -5,7 +5,7 @@
  *      Author: Samuel Simpson
  */
 
-#include <object_detector.h>
+#include "object_detector.h"
 #include <iostream>
 #include <stdlib.h>
 
