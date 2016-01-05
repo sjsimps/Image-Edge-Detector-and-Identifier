@@ -76,6 +76,8 @@ int main(int argc, char* argv[])
 	Image* my_png = new Image();
 	Object_Detector* my_object_detector = new Object_Detector(my_png);
 
+    set_config(argc, argv);
+
 	std::cout<< "Edge detection started.\n";
 
 	bool decoded = my_png->Decode_From_Disk(file);
