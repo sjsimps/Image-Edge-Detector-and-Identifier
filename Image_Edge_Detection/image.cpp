@@ -150,23 +150,24 @@ void Image::Apply_Gauss_Blur(const int kernel_size)
 			{
 				for (int j = -kernel_width; j <= kernel_width; j++)
 				{
-					if ( (x+i >= 0) && (y+j >= 0) && (x+i < m_width) && (y+j < m_height) )
-					{
-						Get_Pixel(x+i, y+j, index_pix);
+                    if ( (x+i >= 0) && (y+j >= 0) && (x+i < m_width) && (y+j < m_height) )
+                    {
+                        Get_Pixel(x+i, y+j, index_pix);
+                    }
+                    else Get_Pixel(x, y, index_pix);
 
-						if (kernel_size == 5)
-						{
-							kernel_val = gauss_5_kernel[i+kernel_width][j+kernel_width] / 159;
-						}
-						else
-						{
-							kernel_val = gauss_3_kernel[i+kernel_width][j+kernel_width];
-						}
+                    if (kernel_size == 5)
+                    {
+                        kernel_val = gauss_5_kernel[i+kernel_width][j+kernel_width] / 159;
+                    }
+                    else
+                    {
+                        kernel_val = gauss_3_kernel[i+kernel_width][j+kernel_width];
+                    }
 
-						r += (index_pix->r * kernel_val);
-						g += (index_pix->g * kernel_val);
-						b += (index_pix->b * kernel_val);
-					}
+                    r += (index_pix->r * kernel_val);
+                    g += (index_pix->g * kernel_val);
+                    b += (index_pix->b * kernel_val);
 				}
 			}
 			new_img[x][y] = new Pixel;
