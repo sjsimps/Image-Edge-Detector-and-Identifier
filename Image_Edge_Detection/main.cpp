@@ -8,6 +8,7 @@
 #include "object_detector.h"
 
 static Color channel = monochrome;
+static int threshold = 89;
 static char* file = "test.png";
 static char output[256];
 
@@ -16,14 +17,15 @@ static void set_config(int argc, char* argv[])
     int option_index;
     static struct option options[] =
     {
-        {"green",   no_argument,       0, 'g'},
-        {"red",     no_argument,       0, 'r'},
-        {"blue",    no_argument,       0, 'b'},
-        {"file",    required_argument, 0, 'f'},
+        {"green",     no_argument,       0, 'g'},
+        {"red",       no_argument,       0, 'r'},
+        {"blue",      no_argument,       0, 'b'},
+        {"file",      required_argument, 0, 'f'},
+        {"threshold", required_argument, 0, 't'},
         {0, 0, 0, 0}
     };
 
-    while ((option_index = getopt_long(argc, argv, "rgbf:", options, NULL)) != -1)
+    while ((option_index = getopt_long(argc, argv, "rgbf:t:", options, NULL)) != -1)
     {
         switch (option_index){
             case 'g':
@@ -37,6 +39,9 @@ static void set_config(int argc, char* argv[])
                 break;
             case 'f':
                 file = optarg;
+                break;
+            case 't':
+                threshold = strtol(optarg, NULL, 10);
                 break;
             default:
                 std::cout<< "\nInvalid option. Program exiting.\n";
@@ -99,7 +104,7 @@ int main(int argc, char* argv[])
 		my_png->Encode_To_Disk(output);
         std::cout<< "Angular Intensity Calculated.\n";
 
-        my_png->Apply_Threshold(89);
+        my_png->Apply_Threshold(threshold);
         filename_append(file, "_threshold", output);
 		my_png->Encode_To_Disk(output);
 		std::cout<< "Threshold Applied.\n";
@@ -111,6 +116,7 @@ int main(int argc, char* argv[])
 		my_png->Encode_To_Disk(output);
 		std::cout<< "Disconnected Graphs Detected.\n";
 
+        //my_object_detector->Highlight_Largest_Graphs(20);
 		my_png->Discard_Image();
 
 		std::cout<< "RGB edge detection completed.\n";

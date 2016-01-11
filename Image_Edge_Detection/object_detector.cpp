@@ -174,6 +174,12 @@ void Object_Detector::Highlight_Largest_Graphs(int num_graphs)
 	 * 	- Each disconnected graph should be of different colour (ideally)
 	 * 	- The rest of the image will be black
 	 */
+    for(std::list<Graph>::iterator iter = m_graphs.begin();
+        iter != m_graphs.end();
+        iter ++)
+    {
+        printf("\nLEN: %d",iter->size);
+    }
 }
 
 void Object_Detector::Highlight_Largest_Graphs_By_Threshold(int threshold)
