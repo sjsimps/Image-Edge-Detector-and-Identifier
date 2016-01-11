@@ -116,7 +116,11 @@ int main(int argc, char* argv[])
 		my_png->Encode_To_Disk(output);
 		std::cout<< "Disconnected Graphs Detected.\n";
 
-        //my_object_detector->Highlight_Largest_Graphs(20);
+        my_object_detector->Highlight_Largest_Graphs(20);
+        filename_append(file, "_disconnected_2", output);
+		my_png->Encode_To_Disk(output);
+		std::cout<< "Disconnected Graphs Thresholded.\n";
+
 		my_png->Discard_Image();
 
 		std::cout<< "RGB edge detection completed.\n";

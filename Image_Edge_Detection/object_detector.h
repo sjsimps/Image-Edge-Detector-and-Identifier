@@ -7,6 +7,8 @@
 #include <vector>
 #include <list>
 #include <queue>
+#include <iterator>
+
 #include "image.h"
 #ifndef INCLUDE_OBJECT_DETECTOR_H_
 #define INCLUDE_OBJECT_DETECTOR_H_

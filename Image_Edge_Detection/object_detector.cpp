@@ -167,19 +167,33 @@ void Object_Detector::Determine_All_Disconected_Graphs()
 
 }
 
-void Object_Detector::Highlight_Largest_Graphs(int num_graphs)
+void Object_Detector::Highlight_Largest_Graphs(int threshold)
 {
 	/* TODO :
 	 * 	- Sort graphs by size and highlight the num_graphs # of largest graphs
 	 * 	- Each disconnected graph should be of different colour (ideally)
 	 * 	- The rest of the image will be black
 	 */
+
+    Pixel *empty_pix = new Pixel;
+	*empty_pix = {.r = 0, .g = 0, .b = 0, .a = 0xFF};
+
     for(std::list<Graph>::iterator iter = m_graphs.begin();
         iter != m_graphs.end();
         iter ++)
     {
-        printf("\nLEN: %d",iter->size);
+        if (iter->size < threshold)
+        {
+            for(std::list<Graph_Point>::iterator point = iter->points.begin();
+                point != iter->points.end();
+                point ++)
+            {
+                m_image->Set_Pixel(point->x, point->y, empty_pix);
+            }
+        }
     }
+
+    delete empty_pix;
 }
 
 void Object_Detector::Highlight_Largest_Graphs_By_Threshold(int threshold)
