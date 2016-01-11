@@ -75,7 +75,8 @@ bool Object_Detector::Is_Edge(int x, int y, Pixel* index_pix)
 				index_x = x+i;
 				index_y = y+j;
 
-				if ( (index_x >= 0) && (index_x < m_image->m_width) && (index_y >= 0) && (index_y < m_image->m_height))
+                //Bounds must be set to reduce edges at the border of the image
+				if ( (index_x >= 1) && (index_x < (m_image->m_width-1)) && (index_y >= 1) && (index_y < (m_image->m_height)-1))
 				{
 					m_image->Get_Pixel(index_x, index_y, index_pix);
 					if (index_pix->r == 0x00)
@@ -112,7 +113,6 @@ void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in, int blu, i
 		bfs_queue.pop();
 
 		m_image->Set_Pixel(current_point.x, current_point.y, blue_pix);
-
 		new_graph.points.push_back(current_point);
 		new_graph.size++;
 
@@ -122,7 +122,7 @@ void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in, int blu, i
 			{
 				index_x = current_point.x + i;
 				index_y = current_point.y + j;
-				if ( (index_x >= 0) && (index_x < m_image->m_width) && (index_y >= 0) && (index_y < m_image->m_height))
+				if ( (index_x >= 1) && (index_x < (m_image->m_width-1)) && (index_y >= 1) && (index_y < (m_image->m_height-1)))
 				{
 					if (m_edges[index_x][index_y])
 					{
@@ -151,14 +151,15 @@ void Object_Detector::Determine_All_Disconected_Graphs()
 
 	int blu = 0x255, gre = 0;
 
-	for (int x = 0; x < (m_image->m_width); x++)
+	for (int x = 1; x < (m_image->m_width-1); x++)
 	{
-		for (int y = 0; y < (m_image->m_height); y++)
+		for (int y = 1; y < (m_image->m_height-1); y++)
 		{
 			if (m_edges[x][y])
 			{
-				blu = (blu - 0xF) % 0xFF;
-				gre = (gre + 0xF) % 0xFF;
+				blu = (blu - 0x2) % 0xFF;
+				gre = (gre + 0x7) % 0xFF;
+
 				Determine_Disconected_Graph(x,y,blu,gre);
 			}
 		}
