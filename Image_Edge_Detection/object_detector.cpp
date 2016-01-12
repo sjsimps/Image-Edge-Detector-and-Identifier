@@ -40,9 +40,9 @@ void Object_Detector::Determine_Edges()
 
 	Pixel* index_pix = new Pixel;
 
-	for (int x = 0; x < (m_image->m_width); x++)
+	for (int x = 1; x < (m_image->m_width-1); x++)
 	{
-		for (int y = 0; y < (m_image->m_height); y++)
+		for (int y = 1; y < (m_image->m_height-1); y++)
 		{
 			m_edges[x][y] = Is_Edge(x, y, index_pix);
 

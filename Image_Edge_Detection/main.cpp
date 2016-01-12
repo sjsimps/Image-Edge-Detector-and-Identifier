@@ -9,6 +9,7 @@
 
 static Color channel = monochrome;
 static int threshold = 89;
+static int edge_length = 89;
 static char* file = "test.png";
 static char output[256];
 
@@ -17,15 +18,16 @@ static void set_config(int argc, char* argv[])
     int option_index;
     static struct option options[] =
     {
-        {"green",     no_argument,       0, 'g'},
-        {"red",       no_argument,       0, 'r'},
-        {"blue",      no_argument,       0, 'b'},
-        {"file",      required_argument, 0, 'f'},
-        {"threshold", required_argument, 0, 't'},
+        {"green",      no_argument,       0, 'g'},
+        {"red",        no_argument,       0, 'r'},
+        {"blue",       no_argument,       0, 'b'},
+        {"file",       required_argument, 0, 'f'},
+        {"threshold",  required_argument, 0, 't'},
+        {"edge-length",required_argument, 0, 'e'},
         {0, 0, 0, 0}
     };
 
-    while ((option_index = getopt_long(argc, argv, "rgbf:t:", options, NULL)) != -1)
+    while ((option_index = getopt_long(argc, argv, "rgbf:t:e:", options, NULL)) != -1)
     {
         switch (option_index){
             case 'g':
@@ -42,6 +44,9 @@ static void set_config(int argc, char* argv[])
                 break;
             case 't':
                 threshold = strtol(optarg, NULL, 10);
+                break;
+            case 'e':
+                edge_length = strtol(optarg, NULL, 10);
                 break;
             default:
                 std::cout<< "\nInvalid option. Program exiting.\n";
@@ -116,7 +121,7 @@ int main(int argc, char* argv[])
 		my_png->Encode_To_Disk(output);
 		std::cout<< "Disconnected Graphs Detected.\n";
 
-        my_object_detector->Highlight_Largest_Graphs(20);
+        my_object_detector->Highlight_Largest_Graphs(edge_length);
         filename_append(file, "_disconnected_2", output);
 		my_png->Encode_To_Disk(output);
 		std::cout<< "Disconnected Graphs Thresholded.\n";
