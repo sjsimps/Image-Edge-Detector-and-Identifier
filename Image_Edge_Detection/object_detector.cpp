@@ -35,9 +35,9 @@ void Object_Detector::Initialize()
 
 void Object_Detector::Determine_Edges()
 {
-	Pixel red_pix;
+	Pixel red_pix, black_pix;
 	red_pix = {.r = 0xFF,	.g = 0x00,	.b = 0x00,	.a = 0xFF};
-
+	black_pix = {.r = 0x00,	.g = 0x00,	.b = 0x00,	.a = 0xFF};
 	Pixel* index_pix = new Pixel;
 
 	for (int x = 1; x < (m_image->m_width-1); x++)
@@ -50,6 +50,17 @@ void Object_Detector::Determine_Edges()
 			{
 				m_image->Set_Pixel(x,y, &red_pix);
 			}
+		}
+	}
+    
+    for (int x = 1; x < (m_image->m_width-1); x++)
+	{
+		for (int y = 1; y < (m_image->m_height-1); y++)
+		{
+			if (!m_edges[x][y])
+            {
+                m_image->Set_Pixel(x,y, &black_pix);
+            }
 		}
 	}
 
@@ -162,6 +173,9 @@ void Object_Detector::Determine_All_Disconected_Graphs()
 
 				Determine_Disconected_Graph(x,y,blu,gre);
 			}
+            else
+            {
+            }
 		}
 	}
 
