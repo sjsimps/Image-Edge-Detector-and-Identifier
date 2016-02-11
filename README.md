@@ -3,29 +3,14 @@ Decodes PNG files, runs edge detection algorithms over the decoded image, then o
 
 Example output:
 
-Initial image:
+1] Initial image
+2] Applying Gaussian blur
+3] Edge maginitude and direction calculation
+4] Edge angle comparison
+5] 85% edge magnitude thresholding
+6] Edge identification and 10px size thresholding
 
-![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/Image_Edge_Detection/test.png)
-
-After gaussian blur has been applied:
-
-![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/Image_Edge_Detection/test_gauss.png)
-
-After edge detection:
-
-![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/Image_Edge_Detection/test_diff.png)
-
-After edge angle comparison:
-
-![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/Image_Edge_Detection/test_angle.png)
-
-After 85% edge magnitude thresholding:
-
-![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/Image_Edge_Detection/test_threshold.png)
-
-After edge identification and 10px size thresholding:
-
-![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/Image_Edge_Detection/test_disconnected_2.png)
+![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/output_flow.png)
 
 Uses LodePNG [lodepng.cpp, lodepng.h] by Lode Vandevenne to complete the PNG image conversion.
 
