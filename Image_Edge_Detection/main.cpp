@@ -18,6 +18,7 @@ static void set_config(int argc, char* argv[])
     int option_index;
     static struct option options[] =
     {
+        {"help",       no_argument,       0, 'h'},
         {"green",      no_argument,       0, 'g'},
         {"red",        no_argument,       0, 'r'},
         {"blue",       no_argument,       0, 'b'},
@@ -27,7 +28,7 @@ static void set_config(int argc, char* argv[])
         {0, 0, 0, 0}
     };
 
-    while ((option_index = getopt_long(argc, argv, "rgbf:t:e:", options, NULL)) != -1)
+    while ((option_index = getopt_long(argc, argv, "hrgbf:t:e:", options, NULL)) != -1)
     {
         switch (option_index){
             case 'g':
@@ -47,6 +48,17 @@ static void set_config(int argc, char* argv[])
                 break;
             case 'e':
                 edge_length = strtol(optarg, NULL, 10);
+                break;
+            case 'h':
+                std::cout <<"\nUsage: png_edge_detection [options]"
+                     <<"\n\t[-f | --file       ] <filename>"
+                     <<"\n\t[-t | --threshold  ] <percent>"
+                     <<"\n\t[-e | --edge-length] <length>"
+                     <<"\n\t[-r | --red  ]"
+                     <<"\n\t[-b | --blue ]"
+                     <<"\n\t[-g | --green]"
+                     <<"\n\t[-h | --help ]";
+                exit(EXIT_SUCCESS);
                 break;
             default:
                 std::cout<< "\nInvalid option. Program exiting.\n";
