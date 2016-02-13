@@ -127,24 +127,44 @@ void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in, int blu, i
 		new_graph.points.push_back(current_point);
 		new_graph.size++;
 
-		for (int i = -1; i <= 1; i++)
-		{
-			for (int j = -1; j <= 1; j++)
-			{
-				index_x = current_point.x + i;
-				index_y = current_point.y + j;
-				if ( (index_x >= 1) && (index_x < (m_image->m_width-1)) && (index_y >= 1) && (index_y < (m_image->m_height-1)))
-				{
-					if (m_edges[index_x][index_y])
-					{
-						new_point.x = index_x;
-						new_point.y = index_y;
-						bfs_queue.push(new_point);
-						m_edges[index_x][index_y] = false;
-					}
-				}
-			}
-		}
+        for (int i = 0; i < 4; i++)
+        {
+            switch(i)
+            {
+                case 0:
+                    index_x = -1;
+                    index_y = 0;
+                    break;
+                case 1:
+                    index_x = 0;
+                    index_y = 1;
+                    break;
+                case 2:
+                    index_x = 0;
+                    index_y = -1;
+                    break;
+                case 3:
+                    index_x = 1;
+                    index_y = 0;
+                    break;
+                default:
+                    exit(EXIT_FAILURE);
+                    break;
+            }
+            index_x += current_point.x;
+            index_y += current_point.y;
+
+            if ( (index_x >= 1) && (index_x < (m_image->m_width-1)) && (index_y >= 1) && (index_y < (m_image->m_height-1)))
+            {
+                if (m_edges[index_x][index_y])
+                {
+                    new_point.x = index_x;
+                    new_point.y = index_y;
+                    bfs_queue.push(new_point);
+                    m_edges[index_x][index_y] = false;
+                }
+            }
+        }
 	}
 
 	delete blue_pix;
