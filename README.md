@@ -1,14 +1,14 @@
-# PNG-Edge-Detection
-Decodes PNG files, runs edge detection algorithms over the decoded image, then outputs new PNG(s). Still in progress.
+##PNG Edge Detection Tool
+Determines and identifies all prominent edges within a PNG image.
 
-#Example output:
+###Example output:
 
 
 
 
 ![alt tag](https://github.com/sjsimps/PNG-Edge-Detection/blob/master/output_flow.png)
 
-#Processing Steps:
+###Processing Steps:
 
   1] Initial image
   
@@ -22,7 +22,7 @@ Decodes PNG files, runs edge detection algorithms over the decoded image, then o
   
   6] Edge identification and 25px edge length thresholding
 
-#Sources Used:
+###Sources Used:
 
 Uses LodePNG [lodepng.cpp, lodepng.h] by Lode Vandevenne to complete the PNG image conversion.
 
