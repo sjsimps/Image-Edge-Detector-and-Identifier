@@ -18,9 +18,9 @@ Decodes PNG files, runs edge detection algorithms over the decoded image, then o
   
   4] Edge angle comparison
   
-  5] 85% edge magnitude thresholding
+  5] 82% edge magnitude thresholding
   
-  6] Edge identification and 10px size thresholding
+  6] Edge identification and 25px edge length thresholding
 
 #Sources Used:
 
