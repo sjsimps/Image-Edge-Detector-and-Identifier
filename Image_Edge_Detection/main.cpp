@@ -10,7 +10,7 @@
 static Color channel = monochrome;
 static int threshold = 89;
 static int edge_length = 89;
-static char* file = "test.png";
+static char* file = NULL;
 static char output[256];
 
 static void set_config(int argc, char* argv[])
@@ -66,13 +66,18 @@ static void set_config(int argc, char* argv[])
                 break;
         }
     }
+    if (file == NULL)
+    {
+        std::cout<< "\nMust specify input file. Program exiting.\n";
+        exit(EXIT_FAILURE);
+    }
 }
 
-static void filename_append(char* file, char* append, char* retval)
+static void filename_append(char* file, const char* append, char* retval)
 {
     int length = strlen(file) + strlen(append) + 1;
     char end[length];
-    int state, index;
+    int index;
 
     strcpy(retval, file);
     for (index = 0; index<length; index++)
@@ -145,7 +150,11 @@ int main(int argc, char* argv[])
 	else
 	{
 		std::cout<< "PNG decode failed. Check to make sure the file you wish to decode exists.";
+        exit(EXIT_FAILURE);
 	}
 
-	return 0;
+    delete my_object_detector;
+    delete my_png;
+
+	return EXIT_SUCCESS;
 }

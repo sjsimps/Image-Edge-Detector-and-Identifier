@@ -70,7 +70,7 @@ void Object_Detector::Determine_Edges()
 bool Object_Detector::Is_Edge(int x, int y, Pixel* index_pix)
 {
 	bool retval = false;
-	int start_x, start_y, end_x, end_y, index_x, index_y;
+	int index_x, index_y;
 
 	m_image->Get_Pixel(x, y, index_pix);
 

@@ -230,7 +230,7 @@ void Image::Calculate_Differential_Intensity(Color channel)
 	const int kernel_width = 1;
 
 	float horz_magnitude, vert_magnitude;
-	int pixel_val;
+	int pixel_val = 0;
 	Pixel* index_pix = new Pixel;
 
 	if (!m_decoded)
@@ -273,6 +273,7 @@ void Image::Calculate_Differential_Intensity(Color channel)
 								break;
 							}
 							case monochrome:
+                            default:
 							{
 								pixel_val = (index_pix->r + index_pix->g + index_pix->b)/3;
 								break;
@@ -353,7 +354,7 @@ float Image::Get_Angular_Similarity(float angle1, float angle2)
 void Image::Calculate_Angular_Intensity(Color channel)
 {
 	const int kernel_width = 1;
-	const int kernel_size = 3;
+	//const int kernel_size = 3;
 
 	float magnitude;
 	float kernel_val;
