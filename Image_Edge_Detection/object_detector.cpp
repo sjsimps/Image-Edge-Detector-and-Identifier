@@ -104,15 +104,12 @@ bool Object_Detector::Is_Edge(int x, int y, Pixel* index_pix)
 	return retval;
 }
 
-void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in, int blu, int gre)
+void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in, Pixel* color)
 {
 	std::queue<Graph_Point,std::list<Graph_Point> > bfs_queue;
 	Graph_Point new_point, current_point;
 	Graph new_graph;
 	int index_x, index_y;
-	Pixel *blue_pix = new Pixel;
-
-	*blue_pix = {.r = 0x00,	.g = gre,	.b = blu,	.a = 0xFF};
 	new_graph.size = 0;
 	new_point = {.x = x_in, .y = y_in};
 	bfs_queue.push(new_point);
@@ -123,7 +120,7 @@ void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in, int blu, i
 		current_point = bfs_queue.front();
 		bfs_queue.pop();
 
-		m_image->Set_Pixel(current_point.x, current_point.y, blue_pix);
+		m_image->Set_Pixel(current_point.x, current_point.y, color);
 		new_graph.points.push_back(current_point);
 		new_graph.size++;
 
@@ -167,20 +164,13 @@ void Object_Detector::Determine_Disconected_Graph(int x_in, int y_in, int blu, i
         }
 	}
 
-	delete blue_pix;
-
 	m_graphs.push_back(new_graph);
 }
 
 void Object_Detector::Determine_All_Disconected_Graphs()
 {
-	/* TODO :
-	 * 	- Find each disc. graph using BFS
-	 * 	- Add each graph to m_graphs
-	 * 	- store all applicable graph points & graph size values within graph structure
-	 */
-
-	int blu = 0x255, gre = 0;
+	Pixel *pix = new Pixel;
+	*pix = {.r = 0xF0,	.g = 0x00,	.b = 0xFF,	.a = 0xFF};
 
 	for (int x = 1; x < (m_image->m_width-1); x++)
 	{
@@ -188,27 +178,20 @@ void Object_Detector::Determine_All_Disconected_Graphs()
 		{
 			if (m_edges[x][y])
 			{
-				blu = (blu - 0x2) % 0xFF;
-				gre = (gre + 0x7) % 0xFF;
+				pix->r = (pix->r + 0x3) % 0xFF;
+				pix->g = (pix->g + 0x5) % 0xFF;
+				pix->b = (pix->b + 0x7) % 0xFF;
 
-				Determine_Disconected_Graph(x,y,blu,gre);
+				Determine_Disconected_Graph(x,y,pix);
 			}
-            else
-            {
-            }
+            
 		}
 	}
-
+    delete pix;
 }
 
 void Object_Detector::Highlight_Largest_Graphs(int threshold)
 {
-	/* TODO :
-	 * 	- Sort graphs by size and highlight the num_graphs # of largest graphs
-	 * 	- Each disconnected graph should be of different colour (ideally)
-	 * 	- The rest of the image will be black
-	 */
-
     Pixel *empty_pix = new Pixel;
 	*empty_pix = {.r = 0, .g = 0, .b = 0, .a = 0xFF};
 
@@ -216,6 +199,7 @@ void Object_Detector::Highlight_Largest_Graphs(int threshold)
         iter != m_graphs.end();
         iter ++)
     {
+        //If a graph is below the threshold size, it is hidden
         if (iter->size < threshold)
         {
             for(std::list<Graph_Point>::iterator point = iter->points.begin();
