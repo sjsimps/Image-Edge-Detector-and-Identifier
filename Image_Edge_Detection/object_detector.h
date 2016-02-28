@@ -30,6 +30,7 @@ public:
 	Object_Detector(Image* thresholded_image);
 	~Object_Detector();
 	void Initialize();
+    void Deinitialize();
 
 	void Determine_Edges();
 
@@ -45,6 +46,8 @@ public:
 
 private:
 	bool Is_Edge(int x, int y, Pixel* index_pix);
+    int initialized_height;
+    int initialized_width;
 };
 
 #endif /* INCLUDE_OBJECT_DETECTOR_H_ */

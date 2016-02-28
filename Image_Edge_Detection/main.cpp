@@ -144,6 +144,7 @@ int main(int argc, char* argv[])
 		std::cout<< "Disconnected Graphs Thresholded.\n";
 
 		my_png->Discard_Image();
+        my_object_detector->Deinitialize();
 
 		std::cout<< "RGB edge detection completed.\n";
 	}

@@ -17,20 +17,26 @@ Object_Detector::Object_Detector(Image* thresholded_image)
 
 Object_Detector::~Object_Detector()
 {
-	for(int x = 0; x < (m_image->m_width); x++)
-	{
-		delete[] m_edges[x];
-	}
-	delete[] m_edges;
 }
 
 void Object_Detector::Initialize()
 {
-	m_edges = new bool*[m_image->m_width];
-	for(int x = 0; x < (m_image->m_width); x++)
+    initialized_width = m_image->m_width;
+    initialized_height = m_image->m_height;
+	m_edges = new bool* [initialized_width];
+	for(int x = 0; x < (initialized_width); x++)
 	{
-		m_edges[x] = new bool[m_image->m_height];
+		m_edges[x] = new bool[initialized_height];
 	}
+}
+
+void Object_Detector::Deinitialize()
+{
+	for(int x = 0; x < (initialized_width); x++)
+	{
+		delete[] m_edges[x];
+	}
+	delete[] m_edges;
 }
 
 void Object_Detector::Determine_Edges()

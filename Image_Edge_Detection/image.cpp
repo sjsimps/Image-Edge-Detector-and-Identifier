@@ -231,7 +231,7 @@ void Image::Calculate_Differential_Intensity(Color channel)
 
 	float horz_magnitude, vert_magnitude;
 	int pixel_val = 0;
-	Pixel* index_pix = new Pixel;
+	Pixel index_pix;
 
 	if (!m_decoded)
 	{
@@ -253,29 +253,29 @@ void Image::Calculate_Differential_Intensity(Color channel)
 				{
 					if ( (x+i >= 0) && (y+j >= 0) && (x+i < m_width) && (y+j < m_height) )
 					{
-						Get_Pixel(x+i, y+j, index_pix);
+						Get_Pixel(x+i, y+j, &index_pix);
 
 						switch (channel)
 						{
 							case red:
 							{
-								pixel_val = index_pix->r;
+								pixel_val = index_pix.r;
 								break;
 							}
 							case green:
 							{
-								pixel_val = index_pix->g;
+								pixel_val = index_pix.g;
 								break;
 							}
 							case blue:
 							{
-								pixel_val = index_pix->b;
+								pixel_val = index_pix.b;
 								break;
 							}
 							case monochrome:
                             default:
 							{
-								pixel_val = (index_pix->r + index_pix->g + index_pix->b)/3;
+								pixel_val = (index_pix.r + index_pix.g + index_pix.b)/3;
 								break;
 							}
 						}
@@ -296,8 +296,6 @@ void Image::Calculate_Differential_Intensity(Color channel)
 	}
 	m_intensity_calculated = true;
 	Map_Intensity_To_Pixels(channel);
-
-	delete index_pix;
 }
 
 float Image::Get_Angular_Kernel_Val(int x, int y, float angle)
@@ -342,9 +340,9 @@ float Image::Get_Angular_Kernel_Val(int x, int y, float angle)
 	return retval/4;
 }
 
+static float pi = 3.14159265;
 float Image::Get_Angular_Similarity(float angle1, float angle2)
 {
-	float pi = 3.14159265;
 	float difference = angle1 - angle2;
 	difference += (difference > pi) ? -(2*pi) : (difference < -pi) ? (2*pi) : 0 ;
 
@@ -443,7 +441,7 @@ float Image::Intensity_At_Percentile(unsigned int percentile)
 {
 
 	int num_entries = m_width*m_height;
-	float *intensities = new float[num_entries];
+	float intensities[num_entries];
 	int index = (percentile < 99) ? ((num_entries-1) / 100) * percentile : (num_entries-1);
 
 	int i = 0;
