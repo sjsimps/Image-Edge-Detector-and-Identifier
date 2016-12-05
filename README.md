@@ -10,17 +10,17 @@ Determines and identifies all prominent edges within a PNG image.
 
 ###Processing Steps:
 
-  1] Initial image
+  1] Initial image.
   
-  2] Applying Gaussian blur
+  2] Applying Gaussian blur.
   
-  3] Edge maginitude and direction calculation
+  3] Edge maginitude and direction calculation.
   
-  4] Edge angle comparison
+  4] Edge angle comparison.
   
-  5] 82% edge magnitude thresholding
+  5] 82% edge magnitude thresholding.
   
-  6] Edge identification and 25px edge length thresholding
+  6] Edge identification at 25px edge length thresholding. Individual edges are displayed by color.
 
 ###Sources Used:
 
